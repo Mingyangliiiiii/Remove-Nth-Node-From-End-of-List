@@ -1,0 +1,81 @@
+#include<iostream>
+using namespace std;
+struct ListNode
+{
+	int val;
+	ListNode* next;
+	ListNode(int x) :val(x), next(NULL){}
+};
+void creatList(ListNode*head)
+{
+	ListNode *temp = head;
+	for (int i = 2; i < 3; ++i)
+	{
+		ListNode *p = NULL;
+		p = new ListNode(i);
+		temp->next = p;
+		temp = p;
+	}
+}
+ListNode* removeNthFromEnd(ListNode* head, int n)
+{
+	if (head == NULL|| n<=0)
+		return NULL;
+	//[1] 1
+	if (head->next == NULL)
+		return NULL;
+	ListNode * k1 = head;
+	ListNode * k2 = k1;
+	ListNode * del = NULL;
+	for (int i = 0; i < n - 1; ++i)
+	{
+		if (k1->next == NULL)
+			return NULL;
+		else
+		{
+			k1 = k1->next;
+		}
+	}
+	//if delete 1 from the end, the iteration above won't execuate.k1 and k2 are point the same thing
+	if (n == 1)
+	{
+		while (k1->next != NULL)
+		{
+			k2 = k1;
+			k1 = k1->next;
+		}
+		k2->next = NULL;
+		delete k1;
+	}
+	else
+	{
+		while (k1->next != NULL)
+		{
+			k1 = k1->next;
+			k2 = k2->next;
+		}
+		del = k2->next;
+		k2->val = del->val;
+		k2->next = del->next;
+		delete del;
+		del = NULL;
+	}
+	return head;
+}
+int main()
+{
+	ListNode * head = NULL;
+	head = new ListNode(1);
+	creatList(head);
+	ListNode * res = NULL;
+	int n;
+	cin >> n;
+	res = removeNthFromEnd(head,n);
+	while (res != NULL)
+	{
+		cout << res->val << "->";
+		res = res->next;
+	}
+	system("pause");
+	return 0;
+}
